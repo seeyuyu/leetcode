@@ -19,6 +19,7 @@
  */
 var maxPathSum = function (root) {
   let res = -Infinity
+  // 后续遍历，当遍历完left,right才开始处理当前值
   function getMax(root) {
     if (!root) {
       return 0
