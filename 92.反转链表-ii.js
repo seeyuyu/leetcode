@@ -80,35 +80,53 @@
 // }
 
 // 全迭代写法  未完待续 to do
-// var reverseBetween = function (head, m, n) {
-//   if(m===n) return head
-//   let start = head;
-//   for (let i = 1; i < m; i++) {
-//     start = start.next
-//     n--
-//   }
-//   let finish = null
-//   let cur = null, pre = start;
-//   console.log(n, start)
-//   while (n > 0 && pre) {
-//     if (n === 1) {
-//       finish = pre.next
-//       // console.log('finish is ', finish)
-//     }
-//     let temp = pre.next
-//     pre.next = cur
-//     cur = pre
-//     pre = temp
-//     n--
-//   }
-//   console.log('finish, cur,start is ', finish,cur,start)
-//   start.next = finish
-//   if(m===1){
-//     return cur
-//   }else{
-//     start = cur
-//     return head
-//   }
-// }
+// 复杂问题拆分为简单问题，一个函数只做一个事情
+// 链表分为了3段，前驱段，反转段，后继段
+// 前驱段为0,m-1;反转段为m,n;后继段为n+1,length
+var reverseBetween = function (head, m, n) {
+  if (m === n) return head
+  let start = head;
+  for (let i = 1; i < m - 1; i++) {
+    start = start.next
+    n--
+  }
+  // let finish = null
+  // let cur = null, pre = start;
+  console.log('start.next , n is ', start.next, n)
+  // start为前驱节点的end, 它要接入后面的值，
+  if (m === 1) {
+    head = reverse(start, n)
+    console.log('m===1', head)
+    return head
+  } else {
+    // 这里之所以减一，是因为相对于start是n,那么相当于start.next,则是n-1
+    start.next = reverse(start.next, n - 1)
+    console.log('head is', head)
+    return head
+  }
+}
+/**
+ * 当前节点，反转前几位数字
+ * @param {*} head 
+ * @param {*} n 
+ */
+function reverse(head, n) {
+  let tail = null, cur = null, pre = head
+  while (n > 0 && pre) {
+    if (n === 1) {
+      tail = pre.next
+      console.log('tail is ', tail)
+    }
+    let temp = pre.next
+    pre.next = cur
+    cur = pre
+    pre = temp
+    n--
+  }
+  console.log('tail, cur, pre, head is ,', tail, cur, pre, head)
+  head.next = tail
+  return cur
+}
 // @lc code=end
 
+// "[3,5] \n 1 \n2"
