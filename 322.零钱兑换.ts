@@ -5,37 +5,49 @@
  */
 
 // @lc code=start
+// function coinChange(coins: number[], amount: number): number {
+//   let memo = new Array(amount + 1)
+//   memo[0] = 0
+//   // console.log('memo is', memo)
+//   function dp(n) {
+//     if (memo[n]) return memo[n]
+//     if (n === 0) return 0
+//     if (n < 0) return -1
+//     let res = Infinity;
+
+//     for (let coin of coins) {
+//       let sub = dp(n - coin)
+//       if (sub == -1) {
+//         continue
+//       }
+//       // console.log('sub is', sub)
+//       res = Math.min(res, 1 + sub)
+//     }
+//     memo[n] = res != Infinity ? res : -1
+//     return memo[n]
+//   }
+//   return dp(amount)
+// };
+
 function coinChange(coins: number[], amount: number): number {
-  let memo = new Array(amount + 1)
-  memo[0] = 0
-  // console.log('memo is', memo)
-  function dp(n) {
-    if (memo[n]) return memo[n]
-    if (n === 0) return 0
-    if (n < 0) return -1
-    let res = Infinity;
-
+  let dp = new Array(amount + 1).fill(amount + 1)
+  // console.log('dp is', dp)
+  dp[0] = 0
+  for (let i = 0; i < amount + 1; i++) {
     for (let coin of coins) {
-      let sub = dp(n - coin)
-      if (sub == -1) {
-        continue
-      }
-      // console.log('sub is', sub)
-      res = Math.min(res, 1 + sub)
+      if (i - coin < 0) continue
+      dp[i] = Math.min(dp[i], 1 + dp[i - coin])
     }
-    memo[n] = res != Infinity ? res : -1
-    return memo[n]
   }
-  return dp(amount)
-};
-
+  console.log('dp is', dp)
+  // 如果amount的值和默认值一致，即没有覆盖任何地方，那就说明没有找不到合适的价位，
+  return (dp[amount] == amount + 1 ? -1 : dp[amount])
+}
 // "[1,2,5] \n 11"
 // "[1] \n 0"
-// "[2] \n 3"
+// "[2] \n 3"         -1
 // "[1] \n 1"
 // "[1,2,5] \n 100"
-
-
 
 // @lc code=end
 
