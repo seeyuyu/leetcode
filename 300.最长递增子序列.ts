@@ -24,10 +24,37 @@
 
 function lengthOfLIS(nums: number[]): number {
   let length = nums.length
-
-  
-  return 
+  let table = []
+  table.push(nums[0])
+  for (let i = 1; i < length; i++) {
+    let cur = nums[i]
+    if (cur > table[table.length - 1]) {
+      table.push(cur)
+    } else {
+      const index = binarySearch(table, cur)
+      // console.log('index is', index)
+      table[index] = cur
+    }
+    // console.log('cur & table is', cur, table)
+  }
+  return table.length
 
 }
+
+const binarySearch = (table, num) => {
+  let min = 0, max = table.length - 1
+  while (min < max) {
+    const mid = min + Math.floor((max - min) / 2)
+    // console.log('mid is', mid)
+    if (num > table[mid]) {
+      min = mid + 1
+    } else {
+      max = mid
+    }
+  }
+  return min
+}
+
+//    "[3,5,6,2,5,4,19,5,6,7,12]"
 // @lc code=end
 
