@@ -23,6 +23,7 @@ function longestPalindromeSubseq(s: string): number {
   }
   // console.log('before dp', dp)
 
+  
   // dp[i][j] 表示i到j之间，最长回文子串的长度
   for (let i = len - 3; i >= 0; i--) {
     for (let j = i + 2; j <= len - 1; j++) {
