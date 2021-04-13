@@ -16,6 +16,7 @@ function maxCoins(nums: number[]): number {
   //     dp[i][i + 1] = 0
   // }
   // dp[i][j] 定义为i开区间，到j开区间的value，意思为不取i和j,ƒ
+  // 定义dp很关键，每个子问题都得独立，不能相互干扰
   for (let i = n; i >= 0; i--) {
     for (let j = i + 1; j <= n + 1; j++) {
       // dp[i][j] = 0
