@@ -33,9 +33,10 @@ class LRUCache {
      */
     put(key: number, value: number): void {
         if (this.map.has(key)) {
+            // 此处因为可能存在key相同，value不同的情况，当map存在此key时候，不能直接将其makeRecently,
+            // 因为不能保证value是不是一样，所以此处先删除，再添加，也可以判断value是否相同，然后在选择是否删除
             this.deleteKey(key)
             this.addRecently(key, value)
-
         } else {
             if (this.cache.getSize() === this.capacity) {
                 this.removeLeastRecently()
@@ -43,6 +44,7 @@ class LRUCache {
             this.addRecently(key, value)
         }
     }
+    // 下面4个api是为了聚合map和cache的操作，防止漏选
     /**
      * 将已存在的节点移到最近使用
      * @param key 
@@ -71,6 +73,7 @@ class LRUCache {
         this.cache.addLast(nodes)
         // 在map中存入元素
         this.map.set(key, nodes)
+        console.log('this.cache is',this.cache)
     }
     // 删除最久未使用的节点
     private removeLeastRecently() {
@@ -91,7 +94,7 @@ class Nodes {
     }
 }
 /**
- * 建立一个双向链表，tail为最新使用的，
+ * 建立一个双向链表，tail为最新使用的，双向链表，可以保证
  */
 class DoubleList {
     private head: Nodes = null
