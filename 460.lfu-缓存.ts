@@ -85,9 +85,6 @@ class LinkedHashMap {
     private map
     private doubleList
     constructor() {
-        // map存放的是key, nodes,nodes里面有key,value
-        // 如果map的nodes中只有value,那么删除队尾的时候，
-        // 返回的值是value,无法得到其key,所以nodes有key，也有value
         this.map = new Map()
         this.doubleList = new DoubleList()
     }
