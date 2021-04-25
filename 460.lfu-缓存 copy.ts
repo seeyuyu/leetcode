@@ -29,7 +29,20 @@ class LFUCache {
         if (!this.keyValue.has(key)) {
             return -1
         }
-        this.increaseFreq(key)
+        // 将其freq+1
+        let freq = this.keyFreq.get(key)
+        this.keyFreq.set(key, freq + 1)
+        // 将freq维护的哈希列表处理一下,从freq中移除，添加到freq+1的最近使用
+        let linked = this.freqKey.get(freq)
+        linked.removeNodesByKey(key)
+        if (freq === this.minFreq && linked.getSize() === 0) this.minFreq++
+        let newLinked = this.freqKey.get(freq + 1)
+        // console.log('before newLinked is',newLinked)
+        if (!newLinked) newLinked = new LinkedHashMap()
+        newLinked.addRecently(key, this.keyValue.get(key))
+        this.freqKey.set(freq + 1, newLinked)
+        // console.log('after newLinked is',newLinked)
+        // console.log('get methods this.freqKey is',this.freqKey)
         return this.keyValue.get(key)
     }
     // 当key存在时候，修改key对于的value,然后就得freq移除，移动到freq+1;
@@ -38,11 +51,23 @@ class LFUCache {
     put(key: number, value: number): void {
         if (this.capacity == 0) return null
         if (this.keyValue.has(key)) {
+            let freq = this.keyFreq.get(key)
+            this.keyFreq.set(key, freq + 1)
             this.keyValue.set(key, value)
-            this.increaseFreq(key)
+            let linked = this.freqKey.get(freq)
+            linked.removeNodesByKey(key)
+            // 如果移动的是最后一个,且最后一个空了
+            // console.log('linked.getSize is',linked.getSize())
+            if (freq === this.minFreq && linked.getSize() === 0) this.minFreq++
+            let newLinked = this.freqKey.get(freq + 1)
+            // console.log('before newLinked is',newLinked)
+            if (!newLinked) newLinked = new LinkedHashMap()
+            newLinked.addRecently(key, value)
+            // console.log('after newLinked is',newLinked)
+            this.freqKey.set(freq + 1, newLinked)
         } else {
             // 如果满了，那就先删除
-            if (this.keyValue.size >= this.capacity) {
+            if (this.keyValue.size == this.capacity) {
                 // console.log('this.minFreq is',this.minFreq)
                 let linked = this.freqKey.get(this.minFreq)
                 let { key: deleteKey } = linked.removeLeastNodes()
@@ -52,8 +77,8 @@ class LFUCache {
             this.keyFreq.set(key, 1)
             this.keyValue.set(key, value)
             let newLinked = this.freqKey.get(1)
-            !newLinked ? newLinked = new LinkedHashMap() : null
-            newLinked.addRecently(key)
+            if (!newLinked) newLinked = new LinkedHashMap()
+            newLinked.addRecently(key, value)
             // console.log('newLinked ', newLinked)
             this.freqKey.set(1, newLinked)
             // console.log('keyValue ', this.keyValue)
@@ -63,27 +88,10 @@ class LFUCache {
         }
         return
     }
-    private increaseFreq(key) {
-        // 将其freq+1
-        let freq = this.keyFreq.get(key)
-        this.keyFreq.set(key, freq + 1)
-        // 将freq维护的哈希列表处理一下,从freq中移除，添加到freq+1的最近使用
-        let linked = this.freqKey.get(freq)
-        linked.removeNodesByKey(key)
-        // 如果移动的是最后一个,且最后一个空了
-        if (freq === this.minFreq && linked.getSize() === 0) this.minFreq++
-        let newLinked = this.freqKey.get(freq + 1)
-        // console.log('before newLinked is',newLinked)
-        !newLinked ? newLinked = new LinkedHashMap() : null
-        newLinked.addRecently(key)
-        this.freqKey.set(freq + 1, newLinked)
-        // console.log('after newLinked is',newLinked)
-        // console.log('get methods this.freqKey is',this.freqKey)
-    }
 }
 class LinkedHashMap {
     private map
-    private doubleList
+    doubleList
     constructor() {
         // map存放的是key, nodes,nodes里面有key,value
         // 如果map的nodes中只有value,那么删除队尾的时候，
@@ -92,8 +100,8 @@ class LinkedHashMap {
         this.doubleList = new DoubleList()
     }
     // 添加到最近的元素
-    addRecently(key) {
-        const nodes = new Nodes(key)
+    addRecently(key, value) {
+        const nodes = new Nodes(key, value)
         this.map.set(key, nodes)
         this.doubleList.addLast(nodes)
         // console.log('this.doubleList is',this.doubleList)
@@ -119,15 +127,14 @@ class LinkedHashMap {
     }
 
 }
-// 此处nodes不用存储value的值，因为单独有一个keyValue表来做这个事情，
-// lru中需要用这个，是因为没有单独的key-value表，故将nodes节点中的value删去后，测试性能比没去前提高了数倍
 class Nodes {
     public key = null
+    public value = null
     public next: Nodes = null
     public prev: Nodes = null
-    constructor(key) {
+    constructor(key, value) {
         this.key = key;
-        // this.value = value
+        this.value = value
     }
 }
 class DoubleList {
@@ -137,8 +144,8 @@ class DoubleList {
     // 既然是通用的DoubleList,那么就不应该管理maxSize这个非通用的属性
     // public maxSize = 0
     constructor() {
-        this.head = new Nodes(0)
-        this.tail = new Nodes(0)
+        this.head = new Nodes(0, 0)
+        this.tail = new Nodes(0, 0)
         this.head.next = this.tail
         this.tail.prev = this.head
         this.size = 0
