@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- <iframe src="https://www.xlzhao.com/" frameborder="0"></iframe> -->
+    <!-- <iframe id="ifm" width="500px" height="1000px" frameborder=0 scrolling=yes src="www.baidu.com"></iframe> -->
+  </body>
+  <script src="https://cdn.staticfile.org/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+  <script>
+    $.cookie('name', 'value', { expires: 7});
+    $.ajax({
+      url: 'http://houtai.com:3000/user/setCookie',
+      success:(res)=>{
+        console.log('success')
+      },
+      xhrFields:{
+        withCredentials:true
+      },
+      crossDomain:true,
+    })
+
+    // $.ajax({
+    //           type: "get",
+    //           url: apiUrl+"api/Api_Login/GetToken",
+    //           dataType: "json",
+    //           // xhrFields: {withCredentials: true},
+    //           data: jsonObj,
+    //           async:false,
+    //           beforeSend: function(xhr) {
+    //               xhr.withCredentials = true;
+    //           },
+    //           crossDomain:true,
+    //           success: function (data) {
+    //               if(data.Status!=1){
+    //                   layer.msg(data.Result)
+    //               }else{
+    //                   layer.msg("登录成功")
+    //                   if (backUrl != null && backUrl != "") {
+    //                       let goUrl = ''
+    //                       // document.cookie='goUrl='+backUrl;
+    //                       if(backUrl.indexOf('://')>-1){
+    //                           backUrl = backUrl.substr(backUrl.indexOf('://')+3,backUrl.length)
+    //                           addCookie("tokenStr", data.Result, 30, "/");
+    //                       }
+    //                       if(backUrl.indexOf('/')>-1){
+    //                           goUrl = backUrl.substr(backUrl.indexOf('/'),backUrl.length)
+    //                           backUrl = backUrl.substr(0,backUrl.indexOf('/'))
+    //                           addCookie("goUrl", goUrl, 30, '/');
+    //                       }
+    //                       var iframeWin = document.getElementById("sendToken").contentWindow;
+    //                       console.log(getCookieValue('Token'))
+    //                       console.log(getCookieValue('token'))
+    //                       if(openType && openType==1){
+    //                           // 向该窗口发送消息
+    //           //                 iframeWin.postMessage(data.Result+';'+backUrl+goUrl, 'http://192.168.11.34:9002/');
+    //                           // backUrl = backUrl+goUrl
+    //                       }else{
+    //                           // 向该窗口发送消息
+    //                           // iframeWin.postMessage(data.Result+';'+backUrl+';'+goUrl, 'http://192.168.11.34:9002/');
+    //                       }
+    //                       // window.location.href = 'http://'+backUrl
+    //                   }
+  </script>
+</html>
