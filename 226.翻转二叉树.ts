@@ -1,7 +1,7 @@
 /*
- * @lc app=leetcode.cn id=102 lang=typescript
+ * @lc app=leetcode.cn id=226 lang=typescript
  *
- * [102] 二叉树的层序遍历
+ * [226] 翻转二叉树
  */
 
 // @lc code=start
@@ -19,17 +19,35 @@
  * }
  */
 
-function levelOrder(root: TreeNode | null): number[][] {
-  let result = []
-  if (!root) return result
+// 这是递归,先序遍历
+// function invertTree(root: TreeNode | null): TreeNode | null {
+//   if(!root) return null
+//   let temp =  root.left 
+//   root.left = root.right 
+//   root.right = temp
+//   if(root.left){
+//     invertTree(root.left)
+//   }
+//   if(root.right){
+//     invertTree(root.right)
+//   }
+//   return root
+// };
+
+
+// BFS
+function invertTree(root: TreeNode | null): TreeNode | null {
+  if (!root) return null
   let queue = [root]
+  let current = null
+  let temp = null
   while (queue.length) {
     let curL = queue.length
-    let curArr= []
-    // result.push(queue)
     for (let i = 0; i < curL; i++) {
-      let current = queue.shift()
-      curArr.push(current.val)
+      current = queue.shift()
+      temp = current.left 
+      current.left = current.right
+      current.right = temp
       if (current.left) {
         queue.push(current.left)
       }
@@ -37,9 +55,8 @@ function levelOrder(root: TreeNode | null): number[][] {
         queue.push(current.right)
       }
     }
-    result.push(curArr)
   }
-  return result
+  return root
 };
 // @lc code=end
 
