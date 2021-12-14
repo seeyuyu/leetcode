@@ -21,7 +21,7 @@
 //         continue
 //       }
 //       // console.log('sub is', sub)
-//       res = Math.min(res, 1 + sub)
+//       res = Math.min(res,  + sub + 1)
 //     }
 //     memo[n] = res != Infinity ? res : -1
 //     return memo[n]
@@ -77,6 +77,45 @@
 // "[1] \n 1"
 // "[1,2,5] \n 100"
 // "[186,419,83,408] \n 6249"
+
+function coinChange(coins: number[], amount: number): number {
+  // let dp = Array.apply(null, { length: amount + 1 })
+  // dp[0] = 0
+  // dp[1] = 1
+  // for (let i = 5; i <= amount; i++) {
+  //   dp[i] = Math.min(dp[i - 1], dp[i - 2], dp[i - 5]) + 1
+  // }
+  // let dpTable = Array.apply(null, { length: amount + 1 })
+  // let dpTable = [].fill(amount + 1)
+  let memo = new Array(amount + 1)
+
+  // console.log(dpTable)
+  memo[0] = 0;
+  // 递归函数
+  function dp(n) {
+    if (memo[n]) return memo[n]
+
+    if (n == 0) return 0
+    if (n < 0) return -1
+    let res = Infinity
+// for of 和 for in 是两回事！
+    for (let item of coins) {
+      let sub = dp(n - +item)
+      if (sub == -1 ){
+        continue
+      } 
+      res = Math.min(res, +sub + 1)
+    }
+
+    memo[n] = res != Infinity ? res : -1
+    return memo[n] 
+  }
+
+  let result = dp(amount)
+  // console.log(memo, result )
+  return result 
+
+}
 
 // @lc code=end
 
