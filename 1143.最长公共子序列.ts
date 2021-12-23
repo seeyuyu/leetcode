@@ -64,7 +64,7 @@ function longestCommonSubsequence(text1: string, text2: string): number {
     }
   }
 
- console.log(dp)
+//  console.log(dp)
   return dp[text1.length][text2.length]
 }
 // ""abc" \n "def""
