@@ -17,7 +17,7 @@ function maxProfit(prices: number[]): number {
     // for(let j =i; j<len; j++){
     //   max = Math.max(prices[j] - prices[i], max)
     //   // dp[i][j] = Math.max(dp[i][j])
-    // }
+    // 
   }
   return max
 };
