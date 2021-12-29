@@ -18,7 +18,7 @@ function twoSum(nums: number[], target: number): number[] {
 
     if(newMap.has(target-nums[i])){
       let value = newMap.get(target-nums[i])
-      if(i !==value){
+      if(i !== value){
         return [i,value]
       }
     }
