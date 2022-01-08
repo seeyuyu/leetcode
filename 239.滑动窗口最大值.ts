@@ -6,15 +6,26 @@
 
 // @lc code=start
 function maxSlidingWindow(nums: number[], k: number): number[] {
+  let newArr = []
+  function findMax(arr){
+    newArr = arr.slice(0)
+    let max = -Infinity
+    for(let item of newArr){
+      if(+item  > max){
+        max = +item
+      }
+    }
+    return max
+  }
+
   let len = nums.length
   let left = 0, right = 0, result = []
   if (len === 1) {
     return nums
   }
   if (len <= k) {
-    let arr = nums.sort((a, b) => b - a)
-    console.log('arr is',arr)
-    return [arr[0]]
+    let res =  findMax(nums)
+    return [res]
   }
   let max = -Infinity
   while (right < len) {
@@ -23,17 +34,17 @@ function maxSlidingWindow(nums: number[], k: number): number[] {
     right++
     // 左侧窗口缩进至窗口大小
     if (right - left >= k) {
-      let arr = nums.slice(left, right).sort((a, b) => b - a)
-      console.log(arr)
+      let res =findMax(nums.slice(left, right))
+      // console.log(res)
       left++
-      result.push(arr[0])
+      result.push(res)
       // max = -Infinity
     }else{
        max = Math.max(max, nums[right])
     }
-    console.log(result)
+    // console.log(result)
   }
-  console.log(result)
+  // console.log(result)
 
   return result 
 };
