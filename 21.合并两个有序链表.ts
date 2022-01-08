@@ -19,31 +19,42 @@
 
 //  Your runtime beats 96.94 % of typescript submissions
 //  Your memory usage beats 59.26 % of typescript submissions (39.9 MB)
-function mergeTwoLists(list1: ListNode | null, list2: ListNode | null): ListNode | null {
-  let index1 = list1, index2 = list2
-  let head = new ListNode(-1)
-  let list = head
-  while(index1 || index2){
-    if(!index1){
-      list.next = index2
-      return head.next
-    }else if(!index2){
-      list.next = index1
-      return head.next
-    }else if(index1.val < index2.val){
-      list.next = new ListNode(index1.val)
-      index1 = index1.next
-      list = list.next
-      // console.log('head1',head)
-    }else {
-      list.next = new ListNode(index2.val)
-      index2 = index2.next
-      list = list.next
-      // console.log('head2',head)
+// function mergeTwoLists(list1: ListNode | null, list2: ListNode | null): ListNode | null {
+//   let index1 = list1, index2 = list2
+//   let head = new ListNode(-1)
+//   let list = head
+//   while(index1 || index2){
+//     if(!index1){
+//       list.next = index2
+//       return head.next
+//     }else if(!index2){
+//       list.next = index1
+//       return head.next
+//     }else if(index1.val < index2.val){
+//       list.next = new ListNode(index1.val)
+//       index1 = index1.next
+//       list = list.next
+//       // console.log('head1',head)
+//     }else {
+//       list.next = new ListNode(index2.val)
+//       index2 = index2.next
+//       list = list.next
+//       // console.log('head2',head)
 
-    }
+//     }
+//   }
+//   return head.next
+// };
+function mergeTwoLists(list1: ListNode | null, list2: ListNode | null): ListNode | null {
+  if (!list1) return list2
+  if (!list2) return list1
+  if (list1.val < list2.val) {
+    list1.next  = mergeTwoLists(list1.next, list2)
+    return list1
+  } else {
+    list2.next = mergeTwoLists(list1, list2.next)
+    return list2
   }
-  return head.next
-};
+}
 // @lc code=end
 
