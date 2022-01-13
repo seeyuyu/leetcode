@@ -5,6 +5,8 @@
  */
 
 // @lc code=start
+// Your runtime beats 79.95 % of typescript submissions
+// Your memory usage beats 82.31 % of typescript submissions (40.5 MB)
 function permute(nums: number[]): number[][] {
   let result = []
   let len = nums.length
